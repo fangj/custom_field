@@ -18,16 +18,7 @@ const schema = {
         },
         loc: {
             title:'location',
-            type: "object",
-            required: ["lat", "lon"],
-            properties: {
-                lat: {
-                    type: "number"
-                },
-                lon: {
-                    type: "number"
-                }
-            }
+            type: "string"
         }
     }
 };
@@ -57,19 +48,19 @@ function Label(props) {
 class GeoPosition extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {...props.formData};
+    this.state = {_id:props.formData};
   }
 
-  onChange(name) {
-    return (event) => {
+  onChange(event) {
+      var value=event.target.value;
       this.setState({
-        [name]: parseFloat(event.target.value)
-      }, () => this.props.onChange(this.state));
-    };
+        _id: value
+      }, () => this.props.onChange(value));
+
   }
 
   render() {
-    const {lat, lon} = this.state;
+    const {_id} = this.state;
     const {title}=this.props.schema;
     const {$id}=this.props.idSchema;
 
@@ -77,8 +68,7 @@ class GeoPosition extends React.Component {
       <div>
       <Label label={title} required={this.props.required} id={$id} />
         <div id={$id} >
-          <input type="number" value={lat} onChange={this.onChange("lat")} />
-          <input type="number" value={lon} onChange={this.onChange("lon")} />
+          <input type="text" value={_id} onChange={this.onChange.bind(this)} />
         </div>
       </div>
     );
@@ -88,6 +78,9 @@ class GeoPosition extends React.Component {
 const fields = {geo: GeoPosition};
 
 ReactDOM.render(<Form schema={schema}
+  formData={{done : false,
+loc : "88",
+title: "A new task77"}}
      uiSchema={uiSchema}
     fields={fields}
         onChange={log("changed")}

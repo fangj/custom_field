@@ -1,6 +1,8 @@
 require('./PageTest.less');
 import Form from "react-jsonschema-form";
 import {Modal} from "react-bootstrap";
+import RestReader from "../../components/rest_reader";
+import PubSub from 'pubsub-js';
 
 const schema = {
     title: "Todo",
@@ -31,6 +33,18 @@ const uiSchema = {
   loc:{"ui:field": "geo"}
 }
 
+
+const ThumbView=(props)=><div>{props.data?JSON.stringify(props.data,null,2):"new"}</div>
+
+const browser=(props)=>{
+    const ThumbView=props.thumbView;
+    const keyField=props.keyField;
+    console.log('ThumbView',props.data)
+    return (<div className="browser">
+                    <div onClick={()=>PubSub.publish('create')} className="new"><ThumbView/></div>
+                    {props.data.map((d,i)=><div key={i} onClick={()=>PubSub.publish('update',d[keyField])} className="old"><ThumbView data={d}/></div>)}
+            </div>)
+}
 
 
 function Label(props) {
@@ -68,14 +82,17 @@ class GeoPosition extends React.Component {
     const {_id} = this.state;
     const {title}=this.props.schema;
     const {$id}=this.props.idSchema;
-
+    const url="/api/post";
+    const keyField="_id";
     return (
       <div>
       <Label label={title} required={this.props.required} id={$id} />
         <div id={$id} >
           <div className='thumb' onClick={()=>{this.setState({showModal:true})}}>empty</div>
           <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
-          <div className="modal-container">hello</div>
+          <div className="modal-container">
+            <RestReader view={browser} url={url} thumbView={ThumbView} keyField={keyField}/>
+          </div>
           </Modal>
         </div>
       </div>

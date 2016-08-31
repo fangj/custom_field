@@ -1,4 +1,4 @@
-require('./RestChooser.less');
+// require('./RestChooser.less');
 import RestReader from "../../components/rest_reader";
 
 const browser=(props)=>{

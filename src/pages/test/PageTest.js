@@ -1,14 +1,6 @@
 require('./PageTest.less');
 import Form from "react-jsonschema-form";
-
 import restField from "../../components/rest_field";
-
-
-
-
-
-
-
 
 const schema = {
     title: "Todo",
@@ -51,9 +43,7 @@ const uiSchema = {
 }
 
 ReactDOM.render(<Form schema={schema}
-  formData={{done : false,
-post : "RqZemlMc8g0Phtqe",
-title: "A new task77"}}
+  formData={formData}
      uiSchema={uiSchema}
     fields={fields}
         onChange={log("changed")}

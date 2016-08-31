@@ -1,5 +1,6 @@
 require('./PageTest.less');
 import Form from "react-jsonschema-form";
+import {Modal} from "react-bootstrap";
 
 const schema = {
     title: "Todo",
@@ -59,6 +60,10 @@ class GeoPosition extends React.Component {
 
   }
 
+  close(){
+    this.setState({showModal:false})
+  }
+
   render() {
     const {_id} = this.state;
     const {title}=this.props.schema;
@@ -68,7 +73,10 @@ class GeoPosition extends React.Component {
       <div>
       <Label label={title} required={this.props.required} id={$id} />
         <div id={$id} >
-          <input type="text" value={_id} onChange={this.onChange.bind(this)} />
+          <div className='thumb' onClick={()=>{this.setState({showModal:true})}}>empty</div>
+          <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
+          <div className="modal-container">hello</div>
+          </Modal>
         </div>
       </div>
     );

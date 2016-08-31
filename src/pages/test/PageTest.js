@@ -1,7 +1,7 @@
 require('./PageTest.less');
 import Form from "react-jsonschema-form";
 import {Modal} from "react-bootstrap";
-import RestReader from "../../components/rest_reader";
+import RestChooser from "../../components/rest_chooser";
 import PubSub from 'pubsub-js';
 
 const schema = {
@@ -34,18 +34,6 @@ const uiSchema = {
 }
 
 
-const ThumbView=(props)=><div>{props.data?JSON.stringify(props.data,null,2):"new"}</div>
-
-const browser=(props)=>{
-    const ThumbView=props.thumbView;
-    const keyField=props.keyField;
-    console.log('ThumbView',props.data)
-    return (<div className="browser">
-                    <div onClick={()=>PubSub.publish('create')} className="new"><ThumbView/></div>
-                    {props.data.map((d,i)=><div key={i} onClick={()=>PubSub.publish('update',d[keyField])} className="old"><ThumbView data={d}/></div>)}
-            </div>)
-}
-
 
 function Label(props) {
   const {label, required, id} = props;
@@ -59,6 +47,7 @@ function Label(props) {
   );
 }
 
+const ThumbView=(props)=><div>{props.data?JSON.stringify(props.data,null,2):"new"}</div>
 
 class GeoPosition extends React.Component {
   constructor(props) {
@@ -91,12 +80,18 @@ class GeoPosition extends React.Component {
           <div className='thumb' onClick={()=>{this.setState({showModal:true})}}>empty</div>
           <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
           <div className="modal-container">
-            <RestReader view={browser} url={url} thumbView={ThumbView} keyField={keyField}/>
+          <RestChooser  url={url} thumbView={ThumbView} keyField={keyField} 
+          onChoose={this.onChoose.bind(this)}/>
           </div>
           </Modal>
         </div>
       </div>
     );
+  }
+
+  onChoose(data){
+    console.log('choose',data);
+    this.props.onChange(data._id)
   }
 }
 

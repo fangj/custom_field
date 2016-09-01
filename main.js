@@ -12,7 +12,7 @@ app.use(express.static('dist'));
 var postDb = new nedb({ filename: 'postDb', autoload: true });
 app.use('/api/post', expressRestResource({ db: postDb }));
 
-require('./uploadify')(app);
+require('./uploadify')(app,'uploads');
 
 
 app.listen(3000, function () {

@@ -42,7 +42,7 @@ function restField({url,keyField,thumbView}){
               </div>
               <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
               <div className="modal-container">
-              <RestChooser  url={url} thumbView={thumbView} keyField={keyField} 
+              <RestChooser  url={url} thumbView={thumbView} keyField={keyField} chosen={_id}
               onChoose={this.onChoose.bind(this)}/>
               </div>
               </Modal>

@@ -3,6 +3,8 @@ var app = express();
 var nedb=require('nedb');
 var expressRestResource = require('express-rest-resource');
 
+app.use(express.static('dist'));
+
 app.get('/', function (req, res) {
   res.send('Hello World!');
 });
@@ -11,6 +13,11 @@ app.use(express.static('dist'));
 
 var postDb = new nedb({ filename: 'postDb', autoload: true });
 app.use('/api/post', expressRestResource({ db: postDb }));
+
+app.use('/upload',function(req,res,next){
+	console.log('upload');
+	next();
+})
 
 require('./uploadify')(app,'uploads');
 

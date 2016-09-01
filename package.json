@@ -23,6 +23,7 @@
     "nedb": "^1.8.0",
     "pubsub-js": "^1.5.3",
     "react-bootstrap": "^0.30.3",
+    "react-dropzone": "^3.5.3",
     "react-jsonschema-form": "^0.40.0",
     "react-mixin": "~1.7.0",
     "superagent": "^2.2.0",

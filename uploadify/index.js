@@ -3,8 +3,13 @@ var multer = require('multer'); // v1.0.5
 var path=require('path');
 var fs = require('fs-extra');
 
+function makeFileName(originalname){
+	var extname=path.extname(originalname);
+	var basename=path.basename(originalname,extname);
+	return basename + '-' + Date.now()+extname;
+}
 
-var uploadify=function (app,upload_path){
+function uploadify(app,upload_path){
 
 	upload_path=upload_path||"uploads";
 	var abs_upload_path=path.join(__dirname,'..',upload_path);
@@ -15,20 +20,23 @@ var uploadify=function (app,upload_path){
 	    cb(null,abs_upload_path)
 	  },
 	  filename: function (req, file, cb) {
-	  	var extname=path.extname(file.originalname);
-	  	var basename=path.basename(file.originalname,extname);
-	    cb(null, basename + '-' + Date.now()+extname);
+	  	var fname=makeFileName(file.originalname);
+	    cb(null, fname);
 	  }
 	})
  
 	var upload = multer({ storage: storage })
 	// var upload = multer({ dest: 'uploads/' }); // for parsing multipart/form-data
+	console.log(abs_upload_path);
+	app.use('/uploads',express.static(abs_upload_path));
+	// app.use('/uploads',express.static(__dirname + '/../uploads'));
 
-	app.use(express.static(abs_upload_path));
 	app.post('/upload', upload.array('files'), function (req, res, next) {
-	  console.log(req.files);
-	  console.log(req.body);
-	  res.json(req.body);
+		var file=req.files[0];
+		if(!file){
+			return res.status(400).end("no file");
+		}
+	  	res.json({url:upload_path+"/"+file.filename});
 	});
 }
 

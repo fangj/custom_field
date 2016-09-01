@@ -14,6 +14,7 @@ app.use('/api/post', expressRestResource({ db: postDb }));
 
 require('./uploadify')(app,'uploads');
 
+// app.use(express.static(__dirname + '/uploads'));
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

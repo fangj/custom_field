@@ -1,8 +1,7 @@
-require('./PageUpload.less');
+require('./ImageUploader.less');
 import UploadZone from "../../components/upload_zone";
-import ImageUploader from "../../components/image_uploader";
 
-class Upload extends React.Component {
+class ImageUploader extends React.Component {
 
     constructor(props) {
         super(props);
@@ -11,13 +10,21 @@ class Upload extends React.Component {
     }
 
     render() {
+        let me = this;
+        const {url}=this.state;
         return (
-            <div className="upload">
-                page upload
-                <ImageUploader/>
+            <div className="image_uploader">
+                 <UploadZone url="/upload" onUploaded={this.onUploaded.bind(this)} accept="image/*"/>
+                 {!url?null:<img src={url}/>}
             </div>
         );
     }
+
+    onUploaded(files){
+        console.log(files[0])
+        this.setState({url:files[0].url});
+    }
+
 
     componentWillMount() {
     }
@@ -42,6 +49,4 @@ class Upload extends React.Component {
     }
 }
 
-ReactDOM.render(<Upload/>, document.getElementById('App'));
-
-module.exports = Upload;
+module.exports = ImageUploader;

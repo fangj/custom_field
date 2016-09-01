@@ -14,11 +14,6 @@ app.use(express.static('dist'));
 var postDb = new nedb({ filename: 'postDb', autoload: true });
 app.use('/api/post', expressRestResource({ db: postDb }));
 
-app.use('/upload',function(req,res,next){
-	console.log('upload');
-	next();
-})
-
 require('./uploadify')(app,'uploads');
 
 // app.use(express.static(__dirname + '/uploads'));
